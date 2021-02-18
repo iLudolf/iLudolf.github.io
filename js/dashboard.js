@@ -190,10 +190,13 @@ function Dashboard01(){
     mes =  aux.substring(5,7)
     ano =  aux.substring(0,4)
    
-    // //Atualizar data
-    let att = "Atualizado em: " + dia +"/"+ mes+"/"+ano
-    document.querySelector("#idAtualizacao").innerHTML = att;
-
+    // //Atualizar Data
+    let att = dia +"/"+ mes+"/"+ano
+    document.querySelector("#idAtualizacao").innerHTML ="Atualizado em: "+ att;
+    
+    //DATA FINAL
+    document.querySelector("#idDataFinal").innerHTML = att;
+    
       
     //Atualizar Total de Casos
     document.querySelector("#idTotalDeCasos").innerHTML = data.Global.TotalConfirmed;
