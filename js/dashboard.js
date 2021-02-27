@@ -161,7 +161,7 @@ $(function(){
 function Dashboard01(){ 
     
 // Conexão com a API 
- fetch('https://api.covid19api.com/summary',{
+ fetch('http://iludolf.ddns.net:3000/global',{
     method:'GET',
     headers: {
         'Content-Type': 'application/json;charset=utf-8' ,
@@ -179,10 +179,10 @@ function Dashboard01(){
  
   //Retorno fetch
   .then(data =>{   
-    dadosApi =  data.Global.Date
+    let num = data.length-1;
 
     // // Pegar data da atualização
-    let aux = ""+data.Global.Date
+    var aux = ""+data[num].Data
     aux.substring()
 
     let dia, mes, ano, calc; 
@@ -191,7 +191,7 @@ function Dashboard01(){
     ano =  aux.substring(0,4)
    
     // //Atualizar Data
-    let att = dia +"/"+ mes+"/"+ano
+    var att = dia +"/"+ mes+"/"+ano
     document.querySelector("#idAtualizacao").innerHTML ="Atualizado em: "+ att;
     
     //DATA FINAL
@@ -199,15 +199,15 @@ function Dashboard01(){
     
       
     //Atualizar Total de Casos
-    document.querySelector("#idTotalDeCasos").innerHTML = data.Global.TotalConfirmed;
+    document.querySelector("#idTotalDeCasos").innerHTML = data[num].TotalConfirmed.substring(0,3)+ ' M';
 
     //Atualizar Recuperados
-    document.querySelector("#idRecuperados").innerHTML = data.Global.TotalRecovered;
+    document.querySelector("#idRecuperados").innerHTML = data[num].TotalRecovered.substring(0,2)+ ',' +data[num].TotalRecovered.substring(2,3) + ' M';
 
     //Atualizar Recuperados
-    document.querySelector("#idObitos").innerHTML = data.Global.TotalDeaths;
+    document.querySelector("#idObitos").innerHTML = data[num].TotalDeaths.substring(0,1) +',' + data[num].TotalDeaths.substring(1,2 )+ ' M' ;
 
-    aux = ""+((data.Global.TotalDeaths / data.Global.TotalConfirmed) *100 )+""
+    aux = ""+((data[num].TotalDeaths / data[num].TotalConfirmed) *100 )+""
     calc = aux.substring(0,3)
     // //Atualizar Taxa de Mortalidade
     
@@ -249,7 +249,7 @@ function Dashboard01(){
               xaxis: {
           show: true,
           color: '#fff',
-          ticks: [[0,'Total de casos'],[30,'Recuperados'],[45,'Óbitos'],[55,'Novos casos'],[66,'Novos Recuperados'], [100,'Novos casos']],
+          ticks: [[10,data[num-5].Data.substring(0,10)],[30,data[num-4].Data.substring(0,10)],[50,data[num-3].Data.substring(0,10)],[70,data[num-2].Data.substring(0,10)],[90,data[num-1].Data.substring(0,10)],[110,data[num].Data.substring(0,10)]],
         }
       });
 
