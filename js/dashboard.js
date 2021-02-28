@@ -1,42 +1,15 @@
 $(function(){
     
     
-    Dashboard01()
+  Dashboard01GlobalTotaldeCasos()
    
 
   
 
-        'use strict'
 
     	
 
-        $.plot('#flotChart1', [{
-          data: dashData2,
-          color: '#00cccc'
-        }], {
-    			series: {
-    				shadowSize: 5,
-            lines: {
-              show: true,
-              lineWidth: 2,
-              fill: true,
-              fillColor: { colors: [ { opacity: 0.2 }, { opacity: 0.2 } ] }
-            }
-    			},
-          grid: {
-            borderWidth: 0,
-            labelMargin: 0
-          },
-    			yaxis: {
-            show: false,
-            min: 0,
-            max: 35
-          },
-    			xaxis: {
-            show: false,
-            max: 50
-          }
-    		});
+        
 
         $.plot('#flotChart2', [{
           data: dashData2,
@@ -158,7 +131,7 @@ $(function(){
 
       });
 
-function Dashboard01(){ 
+function Dashboard01GlobalTotaldeCasos(){ 
     
 // Conexão com a API 
  fetch('http://iludolf.ddns.net:3000/global',{
@@ -181,6 +154,7 @@ function Dashboard01(){
   .then(data =>{   
     let num = data.length-1;
 
+ 
     // // Pegar data da atualização
     var aux = ""+data[num].Data
     aux.substring()
@@ -213,45 +187,102 @@ function Dashboard01(){
     
     document.querySelector("#TaxadeMortalidade").innerHTML =  calc+"%"; 
 
-    var plot = $.plot('#flotChart', [{
-       
-        data: flotSampleData3,
-        color: '#007bff',
-        lines: {
-          fillColor: { colors: [{ opacity: 0 }, { opacity: 0.2 }]}
+     
+    
+
+    // Dashboard 01 
+      var ctx1 = document.getElementById('flotChart0');
+      new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: [data[num-5].Data.substring(0,10), data[num-4].Data.substring(0,10), data[num-3].Data.substring(0,10), data[num-2].Data.substring(0,10), data[num-1].Data.substring(0,10), data[num].Data.substring(0,10)],
+          datasets: [{
+            label: '#Caos Confirmados',          
+            data: [data[num-5].TotalConfirmed, data[num-4].TotalConfirmed, data[num-3].TotalConfirmed, data[num-2].TotalConfirmed, data[num-1].TotalConfirmed, data[num].TotalConfirmed],
+            backgroundColor: '#560bd0'
+          }]
+        },
+        
+        options: {
+          maintainAspectRatio: false,
+          responsive: true,
+          legend: {
+            display: false,
+              labels: {
+                display: false
+              }
+          },
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero:true,
+                fontSize: 0,
+                max: 152993202,
+              }
+            }],
+            xAxes: [{
+              barPercentage: 0.6,
+              ticks: {
+                beginAtZero:true,
+                fontSize: 11
+              }
+            }]
+          }
         }
-      },{
-        data: flotSampleData4,
-        color: '#560bd0',
-        lines: {
-          fillColor: { colors: [{ opacity: 0 }, { opacity: 0.2 }]}
-        }
+      }); // fim Dashboard 01 
+  
+      // Dashboard 02 
+      var valores = [];
+//       var dashData2 = [
+//         [0.0,109362998],
+// [1.1,109487959],
+// [2.2,110160811],
+// [3.3,110579419],
+// [4.4,110927825],
+// [5.5,111219128],
+// [6.6,111390351],
+// [7.7,111962729],
+// [8.8,112103724],
+// [9.9,112547616],
+// [10.10,112993202]
+//       ];
+
+      for(indice in data){
+        valores[indice] =  indice+"."+indice+","+data[indice].TotalConfirmed
+      
+         
+      } 
+      var dashData2 = valores;
+      console.log(dashData2)
+
+      $.plot('#flotChart1', [{
+        data: dashData2,
+        color: '#00cccc'
       }], {
-              series: {
-                  shadowSize: 5,
+        series: {
+          shadowSize: 5,
           lines: {
             show: true,
             lineWidth: 2,
-            fill: true
+            fill: true,
+            fillColor: { colors: [ { opacity: 0.2 }, { opacity: 0.2 } ] }
           }
-              },
+        },
         grid: {
           borderWidth: 0,
-          labelMargin: 8
+          labelMargin: 0
         },
-              yaxis: {
-          show: true,
-                  min: 0,
-                  max: 100,
-          ticks: [[0,''],[20,'20K'],[40,'40K'],[60,'60K'],[80,'80K']],
-          tickColor: '#eee'
-              },
-              xaxis: {
-          show: true,
-          color: '#fff',
-          ticks: [[10,data[num-5].Data.substring(0,10)],[30,data[num-4].Data.substring(0,10)],[50,data[num-3].Data.substring(0,10)],[70,data[num-2].Data.substring(0,10)],[90,data[num-1].Data.substring(0,10)],[110,data[num].Data.substring(0,10)]],
+        yaxis: {
+          show: false,
+          min: 0,
+          max: 35
+        },
+        xaxis: {
+          show: false,
+          max: 50
         }
       });
+    
 
    }); // fim do fetch
 } // Fim da Função

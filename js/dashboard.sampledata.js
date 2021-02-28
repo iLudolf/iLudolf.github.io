@@ -1,4 +1,3 @@
-'use strict'
 
 var dashData1 = [
   [0,26.068193382661477],

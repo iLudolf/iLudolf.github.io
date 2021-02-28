@@ -213,35 +213,39 @@
                     <p class="card-text">Público ao qual os usuários pertenciam no período atual.</p>
                   </div>
                   <div class="btn-group">
-                    <button class="btn active">Dia</button>
-                    <button class="btn">Semana</button>
-                    <button class="btn">Mês</button>
+                    <button class="btn active">Total de casos</button>
+                    <button class="btn">Recuperados</button>
+                    <button class="btn">Óbitos</button>
                   </div>
                 </div><!-- card-header -->
                 <div class="card-body">
                   <div class="card-body-top">
                     <div>
-                      <label class="mg-b-0">Total de casos</label>
-                      <h2 id="idTotalDeCasos"></h2>
+                      <label class="mg-b-0">Total de casos: &nbsp</label>
+                     <b><label id="idTotalDeCasos" class="float-right"> </label></b> 
                     </div>
                     <div>
-                      <label class="mg-b-0" >Recuperados</label>
-                      <h2 id="idRecuperados"></h2>
+                      <label class="mg-b-0" >Recuperados: &nbsp</label>
+                     <b><label id="idRecuperados" class="float-right"></label></b> 
                     </div>
                     <div>
-                      <label class="mg-b-0" >Óbitos</label>
-                      <h2 id="idObitos"></h2>
+                      <label class="mg-b-0" >Óbitos: &nbsp</label>
+                      <b><label id="idObitos" class="float-right"></label></b>
                     </div>
                     <div>
-                      <label class="mg-b-0" >Taxa de Mortalidade</label>
-                      <h2 id="TaxadeMortalidade"></h2>
+                      <label class="mg-b-0" >Taxa de Mortalidade: &nbsp</label>
+                      <b><label  id="TaxadeMortalidade" class="float-right"></label></b>
                     </div>
                   </div><!-- card-body-top -->
-                  <div class="flot-chart-wrapper">
-                    <div id="flotChart" class="flot-chart"></div>
-                  </div><!-- flot-chart-wrapper -->
+                  <div class="">   
+                    <div id="flotChart" class="flot-chart"><canvas id="flotChart0" height="275"></canvas></div>       
+                     </div><!-- flot-chart-wrapper -->
+                     
                 </div><!-- card-body -->
+               
               </div><!-- card -->
+              
+              
             </div><!-- col -->
             <div class="col-lg-5 mg-t-20 mg-lg-t-0">
               <div class="row row-sm">
