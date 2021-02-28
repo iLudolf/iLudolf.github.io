@@ -232,28 +232,19 @@ function Dashboard01GlobalTotaldeCasos(){
       }); // fim Dashboard 01 
   
       // Dashboard 02 
-      var valores = [];
-//       var dashData2 = [
-//         [0.0,109362998],
-// [1.1,109487959],
-// [2.2,110160811],
-// [3.3,110579419],
-// [4.4,110927825],
-// [5.5,111219128],
-// [6.6,111390351],
-// [7.7,111962729],
-// [8.8,112103724],
-// [9.9,112547616],
-// [10.10,112993202]
-//       ];
+      // let valores = [0]
+      let dashData2 = [];
+          
+     
 
       for(indice in data){
-        valores[indice] =  indice+"."+indice+","+data[indice].TotalConfirmed
+        dashData2.push([data[indice].ID,data[indice].TotalConfirmed])
+          
+       } 
+        
       
-         
-      } 
-      var dashData2 = valores;
-      console.log(dashData2)
+      console.table(dashData2);
+    
 
       $.plot('#flotChart1', [{
         data: dashData2,
@@ -275,11 +266,11 @@ function Dashboard01GlobalTotaldeCasos(){
         yaxis: {
           show: false,
           min: 0,
-          max: 35
+          max: 163395725,
         },
         xaxis: {
           show: false,
-          max: 50
+          max: data.length,
         }
       });
     
