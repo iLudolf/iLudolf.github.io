@@ -163,45 +163,61 @@ function Dashboard01GlobalTotaldeCasos(){
     
 
     // Dashboard 01 
-      var ctx1 = document.getElementById('flotChart0');
-      new Chart(ctx1, {
-        type: 'bar',
-        data: {
-          labels: [data[num-5].Data.substring(0,10), data[num-4].Data.substring(0,10), data[num-3].Data.substring(0,10), data[num-2].Data.substring(0,10), data[num-1].Data.substring(0,10), data[num].Data.substring(0,10)],
-          datasets: [{
-            label: '#Caos Confirmados',          
-            data: [data[num-5].TotalConfirmed, data[num-4].TotalConfirmed, data[num-3].TotalConfirmed, data[num-2].TotalConfirmed, data[num-1].TotalConfirmed, data[num].TotalConfirmed],
-            backgroundColor: '#560bd0'
-          }]
-        },
-        
-        options: {
-          maintainAspectRatio: false,
-          responsive: true,
-          legend: {
-            display: false,
-              labels: {
-                display: false
-              }
-          },
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero:true,
-                fontSize: 0,
-                max: 152993202,
-              }
-            }],
-            xAxes: [{
-              barPercentage: 0.6,
-              ticks: {
-                beginAtZero:true,
-                fontSize: 11
-              }
-            }]
+       
+        /** AREA CHART **/
+  var ctx3 = document.getElementById('flotChart0').getContext('2d');
+  var ctx9 = document.getElementById('flotChart0');
+
+  var gradient1 = ctx3.createLinearGradient(0, 350, 0, 0);
+  gradient1.addColorStop(0, 'rgba(241,0,117,0)');
+  gradient1.addColorStop(1, 'rgba(241,0,117,.5)');
+
+  var gradient2 = ctx3.createLinearGradient(0, 280, 0, 0);
+  gradient2.addColorStop(0, 'rgba(0,123,255,0)');
+  gradient2.addColorStop(1, 'rgba(0,123,255,.3)');
+
+  new Chart(ctx9, {
+    type: 'line',
+    data: {
+      labels: [data[num].Data.substring(5,10), data[num].Data.substring(5,10), data[num].Data.substring(5,10), data[num].Data.substring(5,10), data[num].Data.substring(5,10), data[num].Data.substring(5,10), data[num].Data.substring(5,10), data[num].Data.substring(5,10),data[num].Data.substring(5,10), data[num].Data.substring(5,10), ],
+      datasets: [{
+        data: [12, 15, 18, 40, 35, 38, 32, 20, 25, 15],
+        borderColor: '#512E5F',
+        borderWidth: 1,
+        backgroundColor: gradient1
+      },{
+        // data: [10, 20, 25, 55, 50, 45, 35, 37, 45, 35, 55, 40],
+        // borderColor: '#007bff',
+        // borderWidth: 1,
+        // backgroundColor: gradient2
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      legend: {
+        display: false,
+          labels: {
+            display: false
           }
-        }
-      }); // fim Dashboard 01 
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero:true,
+            fontSize: 10,
+            max: 80
+          }
+        }],
+        xAxes: [{
+          ticks: {
+            beginAtZero:true,
+            fontSize: 11
+          }
+        }]
+      }
+    }
+  });
+       // fim Dashboard 01 
   
       // Dashboard 02 
 
@@ -282,8 +298,8 @@ function Dashboard01GlobalTotaldeCasos(){
       var calcularPorcentAnterior = ""+(((data[num-1].NewConfirmed - data[num-2].NewConfirmed)/data[num-2].NewConfirmed)*100); 
       var calctest =  calcularPorcentAnterior.substring(0,4) - calcularPorcentAtual.substring(0,4)+"";
 
-    console.log("Passado: " +data[num-1].NewConfirmed)
-    console.log("Presente: " +data[num].NewConfirmed)
+    // console.log("Passado: " +data[num-1].NewConfirmed)
+    // console.log("Presente: " +data[num].NewConfirmed)
 
       if( calcularPorcentAtual > calcularPorcentAnterior){
         // console.log("Numero de casos é maior" )
