@@ -11,34 +11,6 @@ $(function(){
 
         
 
-        $.plot('#flotChart2', [{
-          data: dashData2,
-          color: '#007bff'
-        }], {
-    			series: {
-    				shadowSize: 10,
-            bars: {
-              show: true,
-              lineWidth: 0,
-              fill: 1,
-              barWidth: .5
-            }
-    			},
-          grid: {
-            borderWidth: 0,
-            labelMargin: 0
-          },
-    			yaxis: {
-            show: false,
-            min: 0,
-            max: 35
-          },
-    			xaxis: {
-            show: false,
-            max: 20
-          }
-    		});
-
 
         //-------------------------------------------------------------//
 
@@ -152,14 +124,14 @@ function Dashboard01GlobalTotaldeCasos(){
  
   //Retorno fetch
   .then(data =>{   
-    let num = data.length-1;
+    var num = data.length-1;
 
  
     // // Pegar data da atualização
     var aux = ""+data[num].Data
     aux.substring()
 
-    let dia, mes, ano, calc; 
+    var dia, mes, ano, calc; 
     dia =  aux.substring(8,10)
     mes =  aux.substring(5,7)
     ano =  aux.substring(0,4)
@@ -171,7 +143,7 @@ function Dashboard01GlobalTotaldeCasos(){
     //DATA FINAL
     document.querySelector("#idDataFinal").innerHTML = att;
     
-      
+       
     //Atualizar Total de Casos
     document.querySelector("#idTotalDeCasos").innerHTML = data[num].TotalConfirmed.substring(0,3)+ ' M';
 
@@ -232,20 +204,37 @@ function Dashboard01GlobalTotaldeCasos(){
       }); // fim Dashboard 01 
   
       // Dashboard 02 
-      // let valores = [0]
-      let dashData2 = [];
+
+      //Calcular taxa de crescimento de casos
+      var calcularPorcentAtual =  ""+(((data[num-1].TotalConfirmed - data[num].TotalConfirmed)/data[num-1].TotalConfirmed)*100); 
+      var calcularPorcentAnterior = ""+(((data[num-1].TotalConfirmed - data[num-2].TotalConfirmed)/data[num-2].TotalConfirmed)*100); 
+      var calctest =  calcularPorcentAnterior.substring(0,4) - calcularPorcentAtual.substring(0,4)+"";
+
+    
+
+      if( calcularPorcentAtual > calcularPorcentAnterior){
+        // console.log("Numero de casos é maior" )
+        document.querySelector("#porcentAtual").innerHTML = calcularPorcentAtual.substring(1,4)+"%" +'<i id="icoPorcentAtual" class="icon ion-md-trending-up tx-success"></i> <small>'+calctest.substring(0,4)+'%</small>';
+
+      }if( calcularPorcentAtual < calcularPorcentAnterior){
+        // console.log("Numero de casos é menor" )
+        document.querySelector("#porcentAtual").innerHTML = calcularPorcentAtual.substring(1,4)+"%" +'<i id="icoPorcentAtual" class="icon ion-md-trending-down tx-danger"></i> <small>'+calctest.substring(0,4)+'%</small>';
+      
+        
+      }
+    
+       //Base de dados        
+       var dashData2 = [];
           
      
-
+      //Preencher base de dados
       for(indice in data){
         dashData2.push([data[indice].ID,data[indice].TotalConfirmed])
           
        } 
         
+      // console.table(dashData2)
       
-      console.table(dashData2);
-    
-
       $.plot('#flotChart1', [{
         data: dashData2,
         color: '#00cccc'
@@ -266,13 +255,76 @@ function Dashboard01GlobalTotaldeCasos(){
         yaxis: {
           show: false,
           min: 0,
-          max: 163395725,
+          max: data[num].TotalConfirmed,
         },
         xaxis: {
           show: false,
           max: data.length,
         }
+      }); // fim do Dashboard 02 
+
+      //Dashboard 03 
+       
+      
+       //Base de dados        
+       var dashData3 = [];
+          
+     
+      //Preencher base de dados
+      for(indice in data){
+        dashData3.push([data[indice].ID,data[indice].NewConfirmed])
+          
+       } 
+
+
+       //Calcular taxa de NOVOS  casos
+      var calcularPorcentAtual =  ""+(((data[num-1].NewConfirmed - data[num].NewConfirmed)/data[num-1].NewConfirmed)*100); 
+      var calcularPorcentAnterior = ""+(((data[num-1].NewConfirmed - data[num-2].NewConfirmed)/data[num-2].NewConfirmed)*100); 
+      var calctest =  calcularPorcentAnterior.substring(0,4) - calcularPorcentAtual.substring(0,4)+"";
+
+    console.log("Passado: " +data[num-1].NewConfirmed)
+    console.log("Presente: " +data[num].NewConfirmed)
+
+      if( calcularPorcentAtual > calcularPorcentAnterior){
+        // console.log("Numero de casos é maior" )
+        document.querySelector("#totaldeCasos").innerHTML = calcularPorcentAtual.substring(0,4)+"%" +'<i id="icoPorcentAtual" class="icon ion-md-trending-up tx-success"></i> <small>'+calctest.substring(0,4)+'%</small>';
+
+      }if( calcularPorcentAtual < calcularPorcentAnterior){
+        // console.log("Numero de casos é menor" )
+        document.querySelector("#totaldeCasos").innerHTML = calcularPorcentAtual.substring(0,4)+"%" +'<i id="icoPorcentAtual" class="icon ion-md-trending-down tx-danger"></i> <small>'+calctest.substring(0,4)+'%</small>';
+               
+      }
+        
+           
+      
+      $.plot('#flotChart2', [{
+        data: dashData3,
+        color: '#007bff'
+      }], {
+        series: {
+          shadowSize: 10,
+          bars: {
+            show: true,
+            lineWidth: 0,
+            fill: 1,
+            barWidth: .5
+          }
+        },
+        grid: {
+          borderWidth: 0,
+          labelMargin: 0
+        },
+        yaxis: {
+          show: false,
+          min: 100,
+          max: data[num].NewConfirmed
+        },
+        xaxis: {
+          show: false,
+          max: 10
+        }
       });
+
     
 
    }); // fim do fetch
