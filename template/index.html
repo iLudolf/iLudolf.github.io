@@ -38,11 +38,15 @@
   
   </head>
   <body>
-
+    <div class="spinner-border justify-content-center" id="loading" style="display: block">
+      <span class="sr-only">Loading...</span>
+    </div>
+   
+<div id="conteudo" style="display: none">
     <div class="az-header">
       <div class="container">
         <div class="az-header-left">
-          <a href="index.html" class="az-logo"><span></span> azia</a>
+          <a href="index.html" class="az-logo "><span class="fa-fw ion-md-analytics"></span>FAESA</a>
           <a href="" id="azMenuShow" class="az-header-menu-icon d-lg-none"><span></span></a>
         </div><!-- az-header-left -->
         <div class="az-header-menu">
@@ -238,7 +242,7 @@
                     </div>
                   </div><!-- card-body-top -->
                   <div class="">   
-                    <div id="flotChart" class="flot-chart"><canvas id="flotChart0" height="275"></canvas></div>       
+                    <div id="flotChart" class="flot-chart"><canvas id="flotChart0" ></canvas></div>       
                      </div><!-- flot-chart-wrapper -->
                      
                 </div><!-- card-body -->
@@ -279,9 +283,8 @@
                   <div class="card card-dashboard-three">
                     <div class="card-header">
                       <p>Novos Casos</p>
-                      <h6>16,869 <small class="tx-success"><i class="icon ion-md-arrow-up"></i> 2.87%</small></h6>
-                      <small>
-                        O número total de sessões no intervalo de datas. É o período durante o qual um usuário está ativamente envolvido com seu site, página ou aplicativo, etc.</small>
+                      <h6 id="novosCasos">16,869 </h6>
+                      <small></small>
                     </div><!-- card-header -->
                     <div class="card-body">
                       <div class="chart"><canvas id="chartBar5"></canvas></div>
@@ -478,62 +481,28 @@
             </div><!-- col-lg-3 -->
             <div class="col-lg-7 col-xl-8 mg-t-20 mg-lg-t-0">
               <div class="card card-table-one">
-                <h6 class="card-title">Quais páginas seus usuários visitam</h6>
+                <h6 class="card-title">Mapa do coronavírus pelo mundo</h6>
                 <p class="az-content-text mg-b-20">Part of this date range occurs before the new users metric had been calculated, so the old users metric is displayed.</p>
                 <div class="table-responsive">
                   <table class="table">
                     <thead>
                       <tr>
                         <th class="wd-5p">&nbsp;</th>
-                        <th class="wd-45p">Country</th>
-                        <th>Entrances</th>
-                        <th>Bounce Rate</th>
-                        <th>Exits</th>
+                        <th class="wd-45p">Pais</th>
+                        <th>Total de Casos</th>
+                        <th>Recuperados</th>
+                        <th>Óbitos</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
+                    <tbody id="idPais">
+                      <!-- <tr>
                         <td><i class="flag-icon flag-icon-us flag-icon-squared"></i></td>
                         <td><strong>United States</strong></td>
                         <td><strong>134</strong> (1.51%)</td>
                         <td>33.58%</td>
                         <td>15.47%</td>
-                      </tr>
-                      <tr>
-                        <td><i class="flag-icon flag-icon-gb flag-icon-squared"></i></td>
-                        <td><strong>United Kingdom</strong></td>
-                        <td><strong>290</strong> (3.30%)</td>
-                        <td>9.22%</td>
-                        <td>7.99%</td>
-                      </tr>
-                      <tr>
-                        <td><i class="flag-icon flag-icon-in flag-icon-squared"></i></td>
-                        <td><strong>India</strong></td>
-                        <td><strong>250</strong> (3.00%)</td>
-                        <td>20.75%</td>
-                        <td>2.40%</td>
-                      </tr>
-                      <tr>
-                        <td><i class="flag-icon flag-icon-ca flag-icon-squared"></i></td>
-                        <td><strong>Canada</strong></td>
-                        <td><strong>216</strong> (2.79%)</td>
-                        <td>32.07%</td>
-                        <td>15.09%</td>
-                      </tr>
-                      <tr>
-                        <td><i class="flag-icon flag-icon-fr flag-icon-squared"></i></td>
-                        <td><strong>France</strong></td>
-                        <td><strong>216</strong> (2.79%)</td>
-                        <td>32.07%</td>
-                        <td>15.09%</td>
-                      </tr>
-                      <tr>
-                        <td><i class="flag-icon flag-icon-ph flag-icon-squared"></i></td>
-                        <td><strong>Philippines</strong></td>
-                        <td><strong>197</strong> (2.12%)</td>
-                        <td>32.07%</td>
-                        <td>15.09%</td>
-                      </tr>
+                      </tr> -->
+                    
                     </tbody>
                   </table>
                 </div><!-- table-responsive -->
@@ -551,7 +520,7 @@
         <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Endereço <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Repositório Git</a> @iLudolf</span>
       </div><!-- container -->
     </div><!-- az-footer -->
-
+  </div> 
 
     <script src="../lib/jquery/jquery.min.js"></script>
     <script src="../lib/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -568,6 +537,6 @@
 
     
     <script src="../js/dashboard.js"></script>
-   
+  
      </body>
 </html>

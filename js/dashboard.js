@@ -1,17 +1,7 @@
 $(function(){
-    
-    
+      
   Dashboard01GlobalTotaldeCasos()
-   
-
-  
-
-
-    	
-
-        
-
-
+  spinner() 
         //-------------------------------------------------------------//
 
 
@@ -24,53 +14,7 @@ $(function(){
         // Bar charts
         $('.peity-donut').peity('donut');
 
-        var ctx5 = document.getElementById('chartBar5').getContext('2d');
-        new Chart(ctx5, {
-          type: 'bar',
-          data: {
-            labels: [0,1,2,3,4,5,6,7],
-            datasets: [{
-              data: [2, 4, 10, 20, 45, 40, 35, 18],
-              backgroundColor: '#560bd0'
-            }, {
-              data: [3, 6, 15, 35, 50, 45, 35, 25],
-              backgroundColor: '#cad0e8'
-            }]
-          },
-          options: {
-            maintainAspectRatio: false,
-            tooltips: {
-              enabled: false
-            },
-            legend: {
-              display: false,
-                labels: {
-                  display: false
-                }
-            },
-            scales: {
-              yAxes: [{
-                display: false,
-                ticks: {
-                  beginAtZero:true,
-                  fontSize: 11,
-                  max: 80
-                }
-              }],
-              xAxes: [{
-                barPercentage: 0.6,
-                gridLines: {
-                  color: 'rgba(0,0,0,0.08)'
-                },
-                ticks: {
-                  beginAtZero:true,
-                  fontSize: 11,
-                  display: false
-                }
-              }]
-            }
-          }
-        });
+       
 
         // Donut Chart
         var datapie = {
@@ -101,6 +45,8 @@ $(function(){
           options: optionpie
         });
 
+
+        
       });
 
 function Dashboard01GlobalTotaldeCasos(){ 
@@ -124,9 +70,8 @@ function Dashboard01GlobalTotaldeCasos(){
  
   //Retorno fetch
   .then(data =>{   
-    var num = data.length-1;
-
- 
+    const num = data.length-1;
+   
     // // Pegar data da atualização
     var aux = ""+data[num].Data
     aux.substring()
@@ -145,26 +90,39 @@ function Dashboard01GlobalTotaldeCasos(){
     
        
     //Atualizar Total de Casos
-    document.querySelector("#idTotalDeCasos").innerHTML = data[num].TotalConfirmed.substring(0,3)+ ' M';
+    document.querySelector("#idTotalDeCasos").innerHTML = abreviarNum(data[num].TotalConfirmed);
 
     //Atualizar Recuperados
-    document.querySelector("#idRecuperados").innerHTML = data[num].TotalRecovered.substring(0,2)+ ',' +data[num].TotalRecovered.substring(2,3) + ' M';
+    document.querySelector("#idRecuperados").innerHTML = abreviarNum(data[num].TotalRecovered);
 
     //Atualizar Recuperados
-    document.querySelector("#idObitos").innerHTML = data[num].TotalDeaths.substring(0,1) +',' + data[num].TotalDeaths.substring(1,2 )+ ' M' ;
+    document.querySelector("#idObitos").innerHTML =  abreviarNum(data[num].TotalDeaths);
 
     aux = ""+((data[num].TotalDeaths / data[num].TotalConfirmed) *100 )+""
-    calc = aux.substring(0,3)
+    
+    
     // //Atualizar Taxa de Mortalidade
     
-    document.querySelector("#TaxadeMortalidade").innerHTML =  calc+"%"; 
+    document.querySelector("#TaxadeMortalidade").innerHTML = abreviarNum(aux)+"%"; 
 
+     // Dashboard 01 
+
+     //Base de dados        
+     var dashData0 = []; //dados total de casos confirmados
+     var dashData1 = []; //dados total de registros por data   
+     var dashData01 = [] //Novos Casos
      
-    
+     //Preencher base de dados
+     for(indice in data){
+      dashData0.push(data[indice].TotalConfirmed)
+      dashData01.push(data[indice].NewConfirmed)
+      dashData1.push(data[indice].Data.substring(0,10))   
 
-    // Dashboard 01 
+           } 
+
+  
        
-        /** AREA CHART **/
+  /** AREA CHART **/
   var ctx3 = document.getElementById('flotChart0').getContext('2d');
   var ctx9 = document.getElementById('flotChart0');
 
@@ -172,6 +130,7 @@ function Dashboard01GlobalTotaldeCasos(){
   gradient1.addColorStop(0, 'rgba(241,0,117,0)');
   gradient1.addColorStop(1, 'rgba(241,0,117,.5)');
 
+  
   var gradient2 = ctx3.createLinearGradient(0, 280, 0, 0);
   gradient2.addColorStop(0, 'rgba(0,123,255,0)');
   gradient2.addColorStop(1, 'rgba(0,123,255,.3)');
@@ -179,62 +138,65 @@ function Dashboard01GlobalTotaldeCasos(){
   new Chart(ctx9, {
     type: 'line',
     data: {
-      labels: [data[num].Data.substring(5,10), data[num].Data.substring(5,10), data[num].Data.substring(5,10), data[num].Data.substring(5,10), data[num].Data.substring(5,10), data[num].Data.substring(5,10), data[num].Data.substring(5,10), data[num].Data.substring(5,10),data[num].Data.substring(5,10), data[num].Data.substring(5,10), ],
+      labels: dashData1,
+     
       datasets: [{
-        data: [12, 15, 18, 40, 35, 38, 32, 20, 25, 15],
+        label: 'Casos Confirmados',
+        data: dashData0,
         borderColor: '#512E5F',
         borderWidth: 1,
-        backgroundColor: gradient1
-      },{
-        // data: [10, 20, 25, 55, 50, 45, 35, 37, 45, 35, 55, 40],
-        // borderColor: '#007bff',
-        // borderWidth: 1,
-        // backgroundColor: gradient2
-      }]
+        backgroundColor: gradient1,
+            
+      },{        
+        label: 'Novos Casos',
+        data: dashData01,
+        borderColor: '#007bff',
+        borderWidth: 1,
+        backgroundColor: gradient2,
+           }]
     },
     options: {
       maintainAspectRatio: false,
       legend: {
-        display: false,
-          labels: {
-            display: false
-          }
+          position: "bottom",
+          display: true,
+          labels: {            
+            display: true,
+                      }
       },
       scales: {
         yAxes: [{
           ticks: {
-            beginAtZero:true,
-            fontSize: 10,
-            max: 80
+            beginAtZero:false,
+            fontSize: 10,             
           }
         }],
         xAxes: [{
           ticks: {
-            beginAtZero:true,
-            fontSize: 11
+            beginAtZero:false,
+            fontSize: 10,
+            display: false
+
           }
         }]
       }
     }
-  });
-       // fim Dashboard 01 
+  });// fim Dashboard 01 
   
-      // Dashboard 02 
+// Dashboard 02 
 
       //Calcular taxa de crescimento de casos
-      var calcularPorcentAtual =  ""+(((data[num-1].TotalConfirmed - data[num].TotalConfirmed)/data[num-1].TotalConfirmed)*100); 
+      var calcularPorcentAtual =  ""+(((data[num].TotalConfirmed - data[num-1].TotalConfirmed)/data[num-1].TotalConfirmed)*100); 
       var calcularPorcentAnterior = ""+(((data[num-1].TotalConfirmed - data[num-2].TotalConfirmed)/data[num-2].TotalConfirmed)*100); 
-      var calctest =  calcularPorcentAnterior.substring(0,4) - calcularPorcentAtual.substring(0,4)+"";
+      
+  
+      if(data[num].TotalConfirmed > data[num-1].TotalConfirmed){
+        // Se Numero de casos for maior que a dia anterior
+        document.querySelector("#porcentAtual").innerHTML =  abreviarNum(data[num].TotalConfirmed)+'<i id="icoPorcentAtual" class="icon ion-md-trending-up tx-success"></i><small>'+abreviarNum(calcularPorcentAtual)+'%</small>';
 
-    
-
-      if( calcularPorcentAtual > calcularPorcentAnterior){
-        // console.log("Numero de casos é maior" )
-        document.querySelector("#porcentAtual").innerHTML = calcularPorcentAtual.substring(1,4)+"%" +'<i id="icoPorcentAtual" class="icon ion-md-trending-up tx-success"></i> <small>'+calctest.substring(0,4)+'%</small>';
-
-      }if( calcularPorcentAtual < calcularPorcentAnterior){
-        // console.log("Numero de casos é menor" )
-        document.querySelector("#porcentAtual").innerHTML = calcularPorcentAtual.substring(1,4)+"%" +'<i id="icoPorcentAtual" class="icon ion-md-trending-down tx-danger"></i> <small>'+calctest.substring(0,4)+'%</small>';
+      }if( data[num].TotalConfirmed < data[num-1].TotalConfirmed){
+        //Se Numero de casos for menor que a dia anterior
+        document.querySelector("#porcentAtual").innerHTML =  abreviarNum(data[num].TotalConfirmed)+' M<i id="icoPorcentAtual" class="icon ion-md-trending-down tx-danger"></i> <small>'+abreviarNum(calcularPorcentAtual)+'%</small>';
       
         
       }
@@ -279,12 +241,10 @@ function Dashboard01GlobalTotaldeCasos(){
         }
       }); // fim do Dashboard 02 
 
-      //Dashboard 03 
-       
-      
-       //Base de dados        
-       var dashData3 = [];
+//Dashboard 03 
           
+      //Base de dados        
+       var dashData3 = [];          
      
       //Preencher base de dados
       for(indice in data){
@@ -292,25 +252,20 @@ function Dashboard01GlobalTotaldeCasos(){
           
        } 
 
+      //Calcular taxa de NOVOS  casos
+      var calcularPorcentAtualNew =  ""+(((data[num].NewConfirmed - data[num-1].NewConfirmed)/data[num-1].NewConfirmed)*100); 
+     
+    
 
-       //Calcular taxa de NOVOS  casos
-      var calcularPorcentAtual =  ""+(((data[num-1].NewConfirmed - data[num].NewConfirmed)/data[num-1].NewConfirmed)*100); 
-      var calcularPorcentAnterior = ""+(((data[num-1].NewConfirmed - data[num-2].NewConfirmed)/data[num-2].NewConfirmed)*100); 
-      var calctest =  calcularPorcentAnterior.substring(0,4) - calcularPorcentAtual.substring(0,4)+"";
-
-    // console.log("Passado: " +data[num-1].NewConfirmed)
-    // console.log("Presente: " +data[num].NewConfirmed)
-
-      if( calcularPorcentAtual > calcularPorcentAnterior){
+      if(data[num].NewConfirmed > data[num-1].NewConfirmed){
         // console.log("Numero de casos é maior" )
-        document.querySelector("#totaldeCasos").innerHTML = calcularPorcentAtual.substring(0,4)+"%" +'<i id="icoPorcentAtual" class="icon ion-md-trending-up tx-success"></i> <small>'+calctest.substring(0,4)+'%</small>';
+        document.querySelector("#totaldeCasos").innerHTML = data[num].NewConfirmed.substring(0,3)+" mil" +'<i id="icoPorcentAtual" class="icon ion-md-trending-up tx-success"></i> <small>'+calcularPorcentAtualNew.substring(0,2)+'%</small>';
 
-      }if( calcularPorcentAtual < calcularPorcentAnterior){
+      }if(data[num].NewConfirmed < data[num-1].NewConfirmed){
         // console.log("Numero de casos é menor" )
-        document.querySelector("#totaldeCasos").innerHTML = calcularPorcentAtual.substring(0,4)+"%" +'<i id="icoPorcentAtual" class="icon ion-md-trending-down tx-danger"></i> <small>'+calctest.substring(0,4)+'%</small>';
+        document.querySelector("#totaldeCasos").innerHTML =  data[num].NewConfirmed.substring(0,3)+" mil" +'<i id="icoPorcentAtual" class="icon ion-md-trending-down tx-danger"></i> <small>'+calcularPorcentAtualNew.substring(0,2)+'%</small>';
                
-      }
-        
+      }       
            
       
       $.plot('#flotChart2', [{
@@ -332,19 +287,181 @@ function Dashboard01GlobalTotaldeCasos(){
         },
         yaxis: {
           show: false,
-          min: 100,
-          max: data[num].NewConfirmed
+          min: 10,
+          max: 411833
         },
         xaxis: {
           show: false,
-          max: 10
+          max: num
         }
-      });
+      
+      }); //Fim do Dashboard 03 
+     
 
+   // Dashboard 04 
+
+  //Base de dados        
+  var totalCData03 = []; //dados total de casos confirmados
+  var newCData03 = []; //dados total de registros por data   
+  var dData03 = [] //Novos Casos
+  
+  var valor= data[num].NewConfirmed.length;
+  console.log()
+  //Preencher base de dados
+  for(indice in data){
+   
+    newCData03.push(parseInt(data[indice].NewConfirmed))
+    dData03.push(data[indice].Data.substring(0,10))   
+
+        } 
+
+
+
+var ctx3 = document.getElementById('chartBar5').getContext('2d');
+
+  var gradient = ctx3.createLinearGradient(0, 0, 0, 250);
+  gradient.addColorStop(0, '#560bd0');
+  gradient.addColorStop(1, '#00cccc');
+
+  new Chart(ctx3, {
+    type: 'bar',
+    data: {
+      labels: dData03,      
+      datasets: [{
+        label: 'Novos Casos',
+        data: newCData03,
+        backgroundColor: gradient
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      responsive: true,
+      legend: {
+        display: false,
+          labels: {
+            display: false
+          }
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero:true,
+            fontSize: 10,
+               }
+        }],
+        xAxes: [{
+          barPercentage: 0.6,
+          ticks: {
+            display: false,
+            beginAtZero:true,
+            fontSize: 11
+            
+          }
+        }]
+      }
+    }
+  });
+      
+ 
+      
+      
+     document.querySelector("#novosCasos").innerHTML = calcularPorcentAtualNew.substring(0,2)+'%';           
+      
+      
+      
+      //Fim Dashboard 04 
+    }); // fim do fetch 
+
+
+    //<<<<<<<<<<<<< RESOLVER O BUG ABAIXO >>>>>>>>>>>>>>>>>>
+       //TABELA - PAIS
+       var dataAtual = new Date();
+       var dia = dataAtual.getDate();
+       var mes = (dataAtual.getMonth() + 1);
+       var ano = dataAtual.getFullYear();
+      //  var horas = dataAtual.getHours();
+      //  var minutos = dataAtual.getMinutes();
+ 
+
+      
+      
+
+       const url = `http://iludolf.ddns.net:3000/countries/${ano+"-"+0+mes+"-"+0+dia}`; // Bug quando o dia ou mes for duas casa
+
+        //<<<<<<<<<<<<< RESOLVER O BUG ACIMA >>>>>>>>>>>>>>>>>>
+       console.log(url)
+       fetch(url,{
+     method:'GET',
+     headers: {
+         'Content-Type': 'application/json;charset=utf-8' ,
+         'X-Access-Token': '5cf9dfd5-3449-485e-b5ae-70a60e997864', 
+         'Accept': 'application/json',        
+         'mode': 'cors',
+         'Access-Control-Allow-Origin': 'http://127.0.0.1:5500/' // solicitações sem credenciais , o valor literal "*" 
+                
+  }})
+ 
+  .then(response => {
+    return response.json();
     
+  })
+  
+   //Retorno fetch
+   .then(data =>{   
+ 
+    
+       var paises = "";
+       
 
-   }); // fim do fetch
-} // Fim da Função
+      for (key in data) {
+        
+       
+
+        paises += '<tr>'+
+       '<td><i class="flag-icon flag-icon-'+data[key].CountryCode.toLowerCase()+' flag-icon-squared"></i></td>'+
+       '<td><strong>'+data[key].Country+'</strong></td>'+
+       '<td><strong>'+abreviarNum(data[key].TotalConfirmed)+'</strong></td>'+
+       '<td>'+abreviarNum(data[key].TotalRecovered)+'</td>'+
+       '<td>'+abreviarNum(data[key].TotalDeaths)+'</td>'+
+     '</tr>';
+      }
+
+
+      document.querySelector("#idPais").innerHTML = paises;
+      
+      console.log(result);
+     }); // fim do fetch 
+
+  } // Fim da Função
 
 
 
+function spinner() {    
+
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("conteudo").style.display = "inline";
+
+
+  // let test = document.querySelector("#body").innerHTML = '<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>';
+  
+}
+
+//Abrevie um número milhares (1k) e milhões (1m)
+function intlFormat(num)
+{
+  return new Intl.NumberFormat().format(Math.round(num*10)/10);
+}
+function abreviarNum(num)
+{
+  if(num >= 1000000)
+    return intlFormat(num/1000000)+' M ';
+  if(num >= 1000)
+    return intlFormat(num/1000)+' mil';
+  return intlFormat(num);
+}
+
+function calcularPorcent(params1, params2) {
+  console.log(params1, params2)
+  return ((((params1-params2)/params2)*100)*100)
+}
