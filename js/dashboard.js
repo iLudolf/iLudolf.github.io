@@ -1,9 +1,13 @@
 $(function(){
       
-  Dashboard01GlobalTotaldeCasos()
-  spinner() 
+  Dashboard01();
+  Dashboard02();
+  Dashboard03();
+  Dashboard04();
+  Dashboard05();
+  tableCountries();
+  spinner();
         //-------------------------------------------------------------//
-
 
         // Line chart
         $('.peity-line').peity('line');
@@ -12,44 +16,14 @@ $(function(){
         $('.peity-bar').peity('bar');
 
         // Bar charts
-        $('.peity-donut').peity('donut');
-
-       
-
-        // Donut Chart
-        var datapie = {
-          labels: ['Search', 'Email', 'Referral', 'Social', 'Other'],
-          datasets: [{
-            data: [25,20,30,15,10],
-            backgroundColor: ['#6f42c1', '#007bff','#17a2b8','#00cccc','#adb2bd']
-          }]
-        };
-
-        var optionpie = {
-          maintainAspectRatio: false,
-          responsive: true,
-          legend: {
-            display: false,
-          },
-          animation: {
-            animateScale: true,
-            animateRotate: true
-          }
-        };
-
-        // For a doughnut chart
-        var ctxpie= document.getElementById('chartDonut');
-        var myPieChart6 = new Chart(ctxpie, {
-          type: 'doughnut',
-          data: datapie,
-          options: optionpie
-        });
+        $('.peity-donut').peity('donut'); 
+     
 
 
         
       });
 
-function Dashboard01GlobalTotaldeCasos(){ 
+function Dashboard01(){ 
     
 // Conexão com a API 
  fetch('http://iludolf.ddns.net:3000/global',{
@@ -181,124 +155,209 @@ function Dashboard01GlobalTotaldeCasos(){
         }]
       }
     }
-  });// fim Dashboard 01 
-  
-// Dashboard 02 
-
-      //Calcular taxa de crescimento de casos
-      var calcularPorcentAtual =  ""+(((data[num].TotalConfirmed - data[num-1].TotalConfirmed)/data[num-1].TotalConfirmed)*100); 
-      var calcularPorcentAnterior = ""+(((data[num-1].TotalConfirmed - data[num-2].TotalConfirmed)/data[num-2].TotalConfirmed)*100); 
+  });// fim Dashboard  
       
-  
-      if(data[num].TotalConfirmed > data[num-1].TotalConfirmed){
-        // Se Numero de casos for maior que a dia anterior
-        document.querySelector("#porcentAtual").innerHTML =  abreviarNum(data[num].TotalConfirmed)+'<i id="icoPorcentAtual" class="icon ion-md-trending-up tx-success"></i><small>'+abreviarNum(calcularPorcentAtual)+'%</small>';
+    }); // fim do fetch 
 
-      }if( data[num].TotalConfirmed < data[num-1].TotalConfirmed){
-        //Se Numero de casos for menor que a dia anterior
-        document.querySelector("#porcentAtual").innerHTML =  abreviarNum(data[num].TotalConfirmed)+' M<i id="icoPorcentAtual" class="icon ion-md-trending-down tx-danger"></i> <small>'+abreviarNum(calcularPorcentAtual)+'%</small>';
-      
-        
-      }
+
+ 
+
+  } // Fim da Função
+
+function Dashboard02() {
+
+  // Conexão com a API 
+fetch('http://iludolf.ddns.net:3000/global',{
+  method:'GET',
+  headers: {
+      'Content-Type': 'application/json;charset=utf-8' ,
+      'X-Access-Token': '5cf9dfd5-3449-485e-b5ae-70a60e997864', 
+      'Accept': 'application/json',        
+      'mode': 'cors',
+      'Access-Control-Allow-Origin': 'http://127.0.0.1:5500/' // solicitações sem credenciais , o valor literal "*" 
+             
+}})
+
+.then(response => {
+ return response.json();
+ 
+})
+
+//Retorno fetch
+.then(data =>{           
     
-       //Base de dados        
-       var dashData2 = [];
-          
-     
-      //Preencher base de dados
-      for(indice in data){
-        dashData2.push([data[indice].ID,data[indice].TotalConfirmed])
-          
-       } 
-        
-      // console.table(dashData2)
-      
-      $.plot('#flotChart1', [{
-        data: dashData2,
-        color: '#00cccc'
-      }], {
-        series: {
-          shadowSize: 5,
-          lines: {
-            show: true,
-            lineWidth: 2,
-            fill: true,
-            fillColor: { colors: [ { opacity: 0.2 }, { opacity: 0.2 } ] }
-          }
-        },
-        grid: {
-          borderWidth: 0,
-          labelMargin: 0
-        },
-        yaxis: {
-          show: false,
-          min: 0,
-          max: data[num].TotalConfirmed,
-        },
-        xaxis: {
-          show: false,
-          max: data.length,
-        }
-      }); // fim do Dashboard 02 
+  const num = data.length-1;
+    
+ 
 
-//Dashboard 03 
-          
+
+
+
+
+   //Calcular taxa de crescimento de casos
+   var calcularPorcentAtual =  ""+(((data[num].TotalConfirmed - data[num-1].TotalConfirmed)/data[num-1].TotalConfirmed)*100); 
+   var calcularPorcentAnterior = ""+(((data[num-1].TotalConfirmed - data[num-2].TotalConfirmed)/data[num-2].TotalConfirmed)*100); 
+   
+
+   if(data[num].TotalConfirmed > data[num-1].TotalConfirmed){
+     // Se Numero de casos for maior que a dia anterior
+     document.querySelector("#porcentAtual").innerHTML =  abreviarNum(data[num].TotalConfirmed)+'<i id="icoPorcentAtual" class="icon ion-md-trending-up tx-success"></i><small>'+abreviarNum(calcularPorcentAtual)+'%</small>';
+
+   }if( data[num].TotalConfirmed < data[num-1].TotalConfirmed){
+     //Se Numero de casos for menor que a dia anterior
+     document.querySelector("#porcentAtual").innerHTML =  abreviarNum(data[num].TotalConfirmed)+' M<i id="icoPorcentAtual" class="icon ion-md-trending-down tx-danger"></i> <small>'+abreviarNum(calcularPorcentAtual)+'%</small>';
+   
+     
+   }
+ 
+    //Base de dados        
+    var dashData2 = [];
+       
+  
+   //Preencher base de dados
+   for(indice in data){
+     dashData2.push([data[indice].ID,data[indice].TotalConfirmed])
+       
+    } 
+     
+   // console.table(dashData2)
+   
+   $.plot('#flotChart1', [{
+     data: dashData2,
+     color: '#00cccc'
+   }], {
+     series: {
+       shadowSize: 5,
+       lines: {
+         show: true,
+         lineWidth: 2,
+         fill: true,
+         fillColor: { colors: [ { opacity: 0.2 }, { opacity: 0.2 } ] }
+       }
+     },
+     grid: {
+       borderWidth: 0,
+       labelMargin: 0
+     },
+     yaxis: {
+       show: false,
+       min: 0,
+       max: data[num].TotalConfirmed,
+     },
+     xaxis: {
+       show: false,
+       max: data.length,
+     }
+   }); // fim do Dashboard 02 
+
+      }); // fim do fetch 
+  }
+
+function Dashboard03() {
+
+  // Conexão com a API 
+ fetch('http://iludolf.ddns.net:3000/global',{
+  method:'GET',
+  headers: {
+      'Content-Type': 'application/json;charset=utf-8' ,
+      'X-Access-Token': '5cf9dfd5-3449-485e-b5ae-70a60e997864', 
+      'Accept': 'application/json',        
+      'mode': 'cors',
+      'Access-Control-Allow-Origin': 'http://127.0.0.1:5500/' // solicitações sem credenciais , o valor literal "*" 
+             
+}})
+
+.then(response => {
+ return response.json();
+ 
+})
+
+//Retorno fetch
+.then(data =>{   
+ 
+  const num = data.length-1;
+                  
       //Base de dados        
        var dashData3 = [];          
      
-      //Preencher base de dados
-      for(indice in data){
-        dashData3.push([data[indice].ID,data[indice].NewConfirmed])
-          
-       } 
-
-      //Calcular taxa de NOVOS  casos
-      var calcularPorcentAtualNew =  ""+(((data[num].NewConfirmed - data[num-1].NewConfirmed)/data[num-1].NewConfirmed)*100); 
-     
-    
-
-      if(data[num].NewConfirmed > data[num-1].NewConfirmed){
-        // console.log("Numero de casos é maior" )
-        document.querySelector("#totaldeCasos").innerHTML = data[num].NewConfirmed.substring(0,3)+" mil" +'<i id="icoPorcentAtual" class="icon ion-md-trending-up tx-success"></i> <small>'+calcularPorcentAtualNew.substring(0,2)+'%</small>';
-
-      }if(data[num].NewConfirmed < data[num-1].NewConfirmed){
-        // console.log("Numero de casos é menor" )
-        document.querySelector("#totaldeCasos").innerHTML =  data[num].NewConfirmed.substring(0,3)+" mil" +'<i id="icoPorcentAtual" class="icon ion-md-trending-down tx-danger"></i> <small>'+calcularPorcentAtualNew.substring(0,2)+'%</small>';
-               
-      }       
+       //Preencher base de dados
+       for(indice in data){
+         dashData3.push([data[indice].ID,data[indice].NewConfirmed])
            
+        } 
+ 
+       //Calcular taxa de NOVOS  casos
+       var calcularPorcentAtualNew =  ""+(((data[num].NewConfirmed - data[num-1].NewConfirmed)/data[num-1].NewConfirmed)*100); 
       
-      $.plot('#flotChart2', [{
-        data: dashData3,
-        color: '#007bff'
-      }], {
-        series: {
-          shadowSize: 10,
-          bars: {
-            show: true,
-            lineWidth: 0,
-            fill: 1,
-            barWidth: .5
-          }
-        },
-        grid: {
-          borderWidth: 0,
-          labelMargin: 0
-        },
-        yaxis: {
-          show: false,
-          min: 10,
-          max: 411833
-        },
-        xaxis: {
-          show: false,
-          max: num
-        }
-      
-      }); //Fim do Dashboard 03 
      
+ 
+       if(data[num].NewConfirmed > data[num-1].NewConfirmed){
+         // console.log("Numero de casos é maior" )
+         document.querySelector("#totaldeCasos").innerHTML = data[num].NewConfirmed.substring(0,3)+" mil" +'<i id="icoPorcentAtual" class="icon ion-md-trending-up tx-success"></i> <small>'+calcularPorcentAtualNew.substring(0,2)+'%</small>';
+ 
+       }if(data[num].NewConfirmed < data[num-1].NewConfirmed){
+         // console.log("Numero de casos é menor" )
+         document.querySelector("#totaldeCasos").innerHTML =  data[num].NewConfirmed.substring(0,3)+" mil" +'<i id="icoPorcentAtual" class="icon ion-md-trending-down tx-danger"></i> <small>'+calcularPorcentAtualNew.substring(0,2)+'%</small>';
+                
+       }       
+            
+       
+       $.plot('#flotChart2', [{
+         data: dashData3,
+         color: '#007bff'
+       }], {
+         series: {
+           shadowSize: 10,
+           bars: {
+             show: true,
+             lineWidth: 0,
+             fill: 1,
+             barWidth: .5
+           }
+         },
+         grid: {
+           borderWidth: 0,
+           labelMargin: 0
+         },
+         yaxis: {
+           show: false,
+           min: 10,
+           max: 411833
+         },
+         xaxis: {
+           show: false,
+           max: num
+         }
+       
+       }); //Fim do Dashboard 03     
+   
+  }); // fim do fetch 
 
-   // Dashboard 04 
+  }  
+
+function Dashboard04() {
+
+  // Conexão com a API 
+ fetch('http://iludolf.ddns.net:3000/global',{
+  method:'GET',
+  headers: {
+      'Content-Type': 'application/json;charset=utf-8' ,
+      'X-Access-Token': '5cf9dfd5-3449-485e-b5ae-70a60e997864', 
+      'Accept': 'application/json',        
+      'mode': 'cors',
+      'Access-Control-Allow-Origin': 'http://127.0.0.1:5500/' // solicitações sem credenciais , o valor literal "*" 
+             
+}})
+
+.then(response => {
+ return response.json();
+ 
+})
+
+//Retorno fetch
+.then(data =>{   
+  const num = data.length-1;     
+    // Dashboard 04 
 
   //Base de dados        
   var totalCData03 = []; //dados total de casos confirmados
@@ -308,8 +367,7 @@ function Dashboard01GlobalTotaldeCasos(){
   var valor= data[num].NewConfirmed.length;
   console.log()
   //Preencher base de dados
-  for(indice in data){
-   
+  for(indice in data){   
     newCData03.push(parseInt(data[indice].NewConfirmed))
     dData03.push(data[indice].Data.substring(0,10))   
 
@@ -365,15 +423,17 @@ var ctx3 = document.getElementById('chartBar5').getContext('2d');
       
  
       
-      
-     document.querySelector("#novosCasos").innerHTML = calcularPorcentAtualNew.substring(0,2)+'%';           
-      
-      
-      
-      //Fim Dashboard 04 
-    }); // fim do fetch 
+     
+  document.querySelector("#novosCasos").innerHTML = calcularPorcentAtualNew.substring(0,2)+'%';
+    
+    
+    //Fim Dashboard 
+  }); // fim do fetch 
 
+  }  
 
+function Dashboard05() {
+  
     //<<<<<<<<<<<<< RESOLVER O BUG ABAIXO >>>>>>>>>>>>>>>>>>
        //TABELA - PAIS
        var dataAtual = new Date();
@@ -409,15 +469,91 @@ var ctx3 = document.getElementById('chartBar5').getContext('2d');
   
    //Retorno fetch
    .then(data =>{   
- 
     
-       var paises = "";
+      const num = data.length-1;
+     
+      
+    // Donut Chart
+    var datapie = {
+      labels: [data[num].Country, data[num].Country, data[num].Country, data[num].Country, data[num].Country],
+      datasets: [{
+        data: [data[num].TotalConfirmed, data[num].TotalConfirmed, data[num].TotalConfirmed, data[num].TotalConfirmed,data[num].TotalConfirmed ],
+        backgroundColor: ['#6f42c1', '#007bff','#17a2b8','#00cccc','#adb2bd']
+      }]
+    };
+
+    var optionpie = {
+      maintainAspectRatio: false,
+      responsive: true,
+      legend: {
+        display: false,
+      },
+      animation: {
+        animateScale: true,
+        animateRotate: true
+      }
+    };
+
+    // For a doughnut chart
+    var ctxpie= document.getElementById('chartDonut');
+    var myPieChart6 = new Chart(ctxpie, {
+      type: 'doughnut',
+      data: datapie,
+      options: optionpie
+    });
+
+
+
+
+     }); // fim do fetch 
+
+  }  
+
+function tableCountries() {
+  
+    //<<<<<<<<<<<<< RESOLVER O BUG ABAIXO >>>>>>>>>>>>>>>>>>
+       //TABELA - PAIS
+       var dataAtual = new Date();
+       var dia = dataAtual.getDate();
+       var mes = (dataAtual.getMonth() + 1);
+       var ano = dataAtual.getFullYear();
+      //  var horas = dataAtual.getHours();
+      //  var minutos = dataAtual.getMinutes();
+ 
+
+      
+      
+
+       const url = `http://iludolf.ddns.net:3000/countries/${ano+"-"+0+mes+"-"+0+dia}`; // Bug quando o dia ou mes for duas casa
+
+        //<<<<<<<<<<<<< RESOLVER O BUG ACIMA >>>>>>>>>>>>>>>>>>
+       console.log(url)
+       fetch(url,{
+     method:'GET',
+     headers: {
+         'Content-Type': 'application/json;charset=utf-8' ,
+         'X-Access-Token': '5cf9dfd5-3449-485e-b5ae-70a60e997864', 
+         'Accept': 'application/json',        
+         'mode': 'cors',
+         'Access-Control-Allow-Origin': 'http://127.0.0.1:5500/' // solicitações sem credenciais , o valor literal "*" 
+                
+  }})
+ 
+  .then(response => {
+    return response.json();
+    
+  })
+  
+   //Retorno fetch
+   .then(data =>{   
+    
+      const num = data.length-1;
+     console.log(data[num].Country);
+      var paises = "";
        
 
-      for (key in data) {
-        
+      for (key in data) {         
        
-
         paises += '<tr>'+
        '<td><i class="flag-icon flag-icon-'+data[key].CountryCode.toLowerCase()+' flag-icon-squared"></i></td>'+
        '<td><strong>'+data[key].Country+'</strong></td>'+
@@ -429,11 +565,10 @@ var ctx3 = document.getElementById('chartBar5').getContext('2d');
 
 
       document.querySelector("#idPais").innerHTML = paises;
-      
-      console.log(result);
+         
      }); // fim do fetch 
 
-  } // Fim da Função
+  }    
 
 
 
