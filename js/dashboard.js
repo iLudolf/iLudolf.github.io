@@ -26,7 +26,7 @@ $(function(){
 function Dashboard01(){ 
     
 // Conexão com a API 
- fetch('http://iludolf.ddns.net:3000/global',{
+ fetch('https://iludolf.ddns.net:3000/global',{
     method:'GET',
     headers: {
         'Content-Type': 'application/json;charset=utf-8' ,
@@ -167,7 +167,7 @@ function Dashboard01(){
 function Dashboard02() {
 
   // Conexão com a API 
-fetch('http://iludolf.ddns.net:3000/global',{
+fetch('https://iludolf.ddns.net:3000/global',{
   method:'GET',
   headers: {
       'Content-Type': 'application/json;charset=utf-8' ,
@@ -256,7 +256,7 @@ fetch('http://iludolf.ddns.net:3000/global',{
 function Dashboard03() {
 
   // Conexão com a API 
- fetch('http://iludolf.ddns.net:3000/global',{
+ fetch('https://iludolf.ddns.net:3000/global',{
   method:'GET',
   headers: {
       'Content-Type': 'application/json;charset=utf-8' ,
@@ -338,7 +338,7 @@ function Dashboard03() {
 function Dashboard04() {
 
   // Conexão com a API 
- fetch('http://iludolf.ddns.net:3000/global',{
+ fetch('https://iludolf.ddns.net:3000/global',{
   method:'GET',
   headers: {
       'Content-Type': 'application/json;charset=utf-8' ,
@@ -433,8 +433,7 @@ var ctx3 = document.getElementById('chartBar5').getContext('2d');
   }  
 
 function Dashboard05() {
-  
-    //<<<<<<<<<<<<< RESOLVER O BUG ABAIXO >>>>>>>>>>>>>>>>>>
+ 
        //TABELA - PAIS
        var dataAtual = new Date();
        var dia = dataAtual.getDate();
@@ -443,15 +442,13 @@ function Dashboard05() {
       //  var horas = dataAtual.getHours();
       //  var minutos = dataAtual.getMinutes();
  
-
+ 
       
       
 
-       const url = `http://iludolf.ddns.net:3000/countries/${ano+"-"+0+mes+"-"+0+dia}`; // Bug quando o dia ou mes for duas casa
-
-        //<<<<<<<<<<<<< RESOLVER O BUG ACIMA >>>>>>>>>>>>>>>>>>
-       console.log(url)
-       fetch(url,{
+    const url = `https://iludolf.ddns.net:3000/countries/${dataAtualFormatada()}`; 
+       
+    fetch(url,{
      method:'GET',
      headers: {
          'Content-Type': 'application/json;charset=utf-8' ,
@@ -469,15 +466,34 @@ function Dashboard05() {
   
    //Retorno fetch
    .then(data =>{   
+ 
+    var dadosPais ="";
+    var color = ['bg-purple','bg-primary','bg-info', 'bg-teal', 'bg-gray'];
+    var dashdata =[];
+
+    for(var i = 0; i <= 4; i++){
+      dashdata.push(data[i].Country); 
+
+      dadosPais += '<div class="az-traffic-detail-item">'+
+      '<div>'+
+      '<span>'+data[i].Country+'</span>'+
+      '<span>'+abreviarNum(data[i].TotalConfirmed)+'<span></span></span>'+
+      '</div>'+
+      '<div class="progress">'+
+     '<div class="progress-bar '+color[i]+' wd-25p"  style="width: '+abreviarNum(data[i].TotalConfirmed).toString(0,3)+'%"  role="progressbar" aria-valuenow="'+data[i].TotalConfirmed+'" aria-valuemin="0" aria-valuemax="115619777"></div>'+
+     '</div>'+
+     '</div>';
     
-      const num = data.length-1;
-     
-      
+    }
+    console.log(dashdata);
+    document.querySelector("#teste").innerHTML = dadosPais;
+    
     // Donut Chart
     var datapie = {
-      labels: [data[num].Country, data[num].Country, data[num].Country, data[num].Country, data[num].Country],
+      labels: dashdata,
+      //  [data[0].Country, data[1].Country, data[2].Country, data[3].Country, data[4].Country],
       datasets: [{
-        data: [data[num].TotalConfirmed, data[num].TotalConfirmed, data[num].TotalConfirmed, data[num].TotalConfirmed,data[num].TotalConfirmed ],
+        data: [data[0].TotalConfirmed, data[1].TotalConfirmed, data[2].TotalConfirmed, data[3].TotalConfirmed,data[4].TotalConfirmed],
         backgroundColor: ['#6f42c1', '#007bff','#17a2b8','#00cccc','#adb2bd']
       }]
     };
@@ -511,23 +527,11 @@ function Dashboard05() {
 
 function tableCountries() {
   
-    //<<<<<<<<<<<<< RESOLVER O BUG ABAIXO >>>>>>>>>>>>>>>>>>
-       //TABELA - PAIS
-       var dataAtual = new Date();
-       var dia = dataAtual.getDate();
-       var mes = (dataAtual.getMonth() + 1);
-       var ano = dataAtual.getFullYear();
-      //  var horas = dataAtual.getHours();
-      //  var minutos = dataAtual.getMinutes();
- 
+  
+         
 
-      
-      
-
-       const url = `http://iludolf.ddns.net:3000/countries/${ano+"-"+0+mes+"-"+0+dia}`; // Bug quando o dia ou mes for duas casa
-
-        //<<<<<<<<<<<<< RESOLVER O BUG ACIMA >>>>>>>>>>>>>>>>>>
-       console.log(url)
+       const url = `https://iludolf.ddns.net:3000/countries/${dataAtualFormatada()}`; 
+    
        fetch(url,{
      method:'GET',
      headers: {
@@ -561,6 +565,8 @@ function tableCountries() {
        '<td>'+abreviarNum(data[key].TotalRecovered)+'</td>'+
        '<td>'+abreviarNum(data[key].TotalDeaths)+'</td>'+
      '</tr>';
+
+     
       }
 
 
@@ -599,4 +605,14 @@ function abreviarNum(num)
 function calcularPorcent(params1, params2) {
   console.log(params1, params2)
   return ((((params1-params2)/params2)*100)*100)
+}
+
+function dataAtualFormatada(){
+  var data = new Date(),
+      dia  = data.getDate().toString(),
+      diaF = (dia.length == 1) ? '0'+dia : dia,
+      mes  = (data.getMonth()+1).toString(), //+1 pois no getMonth Janeiro começa com zero.
+      mesF = (mes.length == 1) ? '0'+mes : mes,
+      anoF = data.getFullYear();
+  return anoF+"-"+mesF+"-"+diaF;
 }
