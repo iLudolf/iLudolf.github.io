@@ -85,16 +85,17 @@ function Dashboard01(){
      var dashData0 = []; //dados total de casos confirmados
      var dashData1 = []; //dados total de registros por data   
      var dashData01 = [] //Novos Casos
-     
+        
      //Preencher base de dados
      for(indice in data){
-      dashData0.push(data[indice].TotalConfirmed)
-      dashData01.push(data[indice].NewConfirmed)
+     
+      dashData0.push(data[indice].TotalConfirmed )
+      dashData01.push(data[indice].NewConfirmed )
       dashData1.push(data[indice].Data.substring(0,10))   
 
            } 
 
-  
+        
        
   /** AREA CHART **/
   var ctx3 = document.getElementById('flotChart0').getContext('2d');
@@ -130,7 +131,7 @@ function Dashboard01(){
            }]
     },
     options: {
-      maintainAspectRatio: false,
+       maintainAspectRatio: false,
       legend: {
           position: "bottom",
           display: true,
@@ -278,12 +279,13 @@ function Dashboard03() {
   const num = data.length-1;
                   
       //Base de dados        
-       var dashData3 = [];          
+       var dashData3 = [];   
+       var dashData2 = [];       
      
        //Preencher base de dados
        for(indice in data){
-         dashData3.push([data[indice].ID,data[indice].NewConfirmed])
-           
+         dashData3.push(data[indice].NewConfirmed)
+         dashData2.push(data[indice].Data.substring(0,10))
         } 
  
        //Calcular taxa de NOVOS  casos
@@ -300,36 +302,54 @@ function Dashboard03() {
          document.querySelector("#totaldeCasos").innerHTML =  data[num].NewConfirmed.substring(0,3)+" mil" +'<i id="icoPorcentAtual" class="icon ion-md-trending-down tx-danger"></i> <small>'+calcularPorcentAtualNew.substring(0,2)+'%</small>';
                 
        }       
-            
-       
-       $.plot('#flotChart2', [{
-         data: dashData3,
-         color: '#007bff'
-       }], {
-         series: {
-           shadowSize: 10,
-           bars: {
-             show: true,
-             lineWidth: 0,
-             fill: 1,
-             barWidth: .5
+
+
+       var ctx8 = document.getElementById('flotChart2');
+       new Chart(ctx8, {
+         type: 'line',
+         data: {
+           labels: dashData2,
+           datasets: [{
+            //  data: [12, 15, 18],
+            //  borderColor: '#f10075',
+            //  borderWidth: 1,
+            //  fill: false
+           },{
+             data: dashData3,
+             borderColor: '#007bff',
+             borderWidth: 1,
+             fill: false
+           }]
+         },
+         options: {
+           maintainAspectRatio: false,
+           legend: {
+             display: false,
+               labels: {
+                 display: false
+               }
+           },
+           scales: {
+             yAxes: [{
+               ticks: {
+                 display: false,
+                 beginAtZero:true,
+                 fontSize: 10,
+                //  max: 80
+               }
+             }],
+             xAxes: [{
+               ticks: {
+                 display: false,
+                 beginAtZero:true,
+                 fontSize: 11
+               }
+             }]
            }
-         },
-         grid: {
-           borderWidth: 0,
-           labelMargin: 0
-         },
-         yaxis: {
-           show: false,
-           min: 10,
-           max: 411833
-         },
-         xaxis: {
-           show: false,
-           max: num
          }
+       });
+                
        
-       }); //Fim do Dashboard 03     
    
   }); // fim do fetch 
 
@@ -357,11 +377,10 @@ function Dashboard04() {
 //Retorno fetch
 .then(data =>{   
   const num = data.length-1;     
-    // Dashboard 04 
-
+    
   //Base de dados        
-  var totalCData03 = []; //dados total de casos confirmados
-  var newCData03 = []; //dados total de registros por data   
+  var totalCData03 = []; //Dados total de casos confirmados
+  var newCData03 = []; //Dados total de registros por data   
   var dData03 = [] //Novos Casos
   
   var valor= data[num].NewConfirmed.length;
@@ -470,9 +489,16 @@ function Dashboard05() {
     var dadosPais ="";
     var color = ['bg-purple','bg-primary','bg-info', 'bg-teal', 'bg-gray'];
     var dashdata =[];
+  
+   
 
     for(var i = 0; i <= 4; i++){
       dashdata.push(data[i].Country); 
+      
+      var valores  = abreviarNum(data[i].TotalConfirmed).replace("M"," ");
+      var dataValores  = valores.replace(",",".");
+
+           
 
       dadosPais += '<div class="az-traffic-detail-item">'+
       '<div>'+
@@ -480,12 +506,12 @@ function Dashboard05() {
       '<span>'+abreviarNum(data[i].TotalConfirmed)+'<span></span></span>'+
       '</div>'+
       '<div class="progress">'+
-     '<div class="progress-bar '+color[i]+' wd-25p"  style="width: '+abreviarNum(data[i].TotalConfirmed).toString(0,3)+'%"  role="progressbar" aria-valuenow="'+data[i].TotalConfirmed+'" aria-valuemin="0" aria-valuemax="115619777"></div>'+
+     '<div class="progress-bar '+color[i]+' "style="width: '+parseInt (dataValores)+'%" ></div>'+
      '</div>'+
      '</div>';
     
     }
-    console.log(dashdata);
+
     document.querySelector("#teste").innerHTML = dadosPais;
     
     // Donut Chart
