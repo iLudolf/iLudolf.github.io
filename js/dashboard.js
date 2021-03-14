@@ -485,8 +485,15 @@ function Dashboard05() {
   
    //Retorno fetch
    .then(data =>{   
+
+
+   
+    
+    
+   
  
-    var dadosPais ="";
+    var dadosPais="";
+    var infdados ="";
     var color = ['bg-purple','bg-primary','bg-info', 'bg-teal', 'bg-gray'];
     var dashdata =[];
   
@@ -509,15 +516,27 @@ function Dashboard05() {
      '<div class="progress-bar '+color[i]+' "style="width: '+parseInt (dataValores)+'%" ></div>'+
      '</div>'+
      '</div>';
+
+
+     infdados += '<div class="az-list-item">'+
+       '<div>'+
+     '<h6>'+data[i].Country+'</h6>'+
+     '<span>Total casos confirmados</span>'+
+     '</div>'+
+     '<div>'+
+     '<h6 class="tx-primary">'+abreviarNum(data[i].NewConfirmed)+'</h6>'+
+     '<span>'+abreviarNum(data[i].TotalConfirmed)+'</span>'+
+     '</div>'+
+     '</div>';
     
     }
 
+    document.querySelector("#totaldeCasosDash05").innerHTML = infdados;
     document.querySelector("#teste").innerHTML = dadosPais;
     
     // Donut Chart
     var datapie = {
       labels: dashdata,
-      //  [data[0].Country, data[1].Country, data[2].Country, data[3].Country, data[4].Country],
       datasets: [{
         data: [data[0].TotalConfirmed, data[1].TotalConfirmed, data[2].TotalConfirmed, data[3].TotalConfirmed,data[4].TotalConfirmed],
         backgroundColor: ['#6f42c1', '#007bff','#17a2b8','#00cccc','#adb2bd']
